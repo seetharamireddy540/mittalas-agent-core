@@ -86,7 +86,7 @@ if __name__ == "__main__":
     
     # Define parameters
     model_id = "anthropic.claude-3-5-sonnet-20240620-v1:0"
-    prompt = "Explain how machine learning works in simple terms."
+    prompt = "Tech me java basics"
     
     # Invoke the model
     response = agent.invoke_model(model_id, prompt)
