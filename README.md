@@ -49,3 +49,10 @@ aws apigateway test-invoke-method \
 ```bash
 npx cdk destroy
 ```
+
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows use: .venv\Scripts\activate
+
+# Install Strands and tools
+pip install strands-agents strands-agents-tools
