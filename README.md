@@ -17,6 +17,14 @@ npx cdk bootstrap
 3. Deploy the stack:
 ```bash
 npm run deploy
+npm run deploy:arm64
+npm run deploy:x86_64
+or 
+LAMBDA_ARCH=x86_64 cdk deploy
+
+
+
+
 ```
 
 ## Architecture
