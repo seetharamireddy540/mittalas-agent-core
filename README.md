@@ -22,6 +22,7 @@ npm run deploy:x86_64
 or 
 LAMBDA_ARCH=x86_64 cdk deploy
 
+Ram19 account
 
 
 

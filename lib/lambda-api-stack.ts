@@ -34,12 +34,38 @@ export class LambdaApiStack extends cdk.Stack {
       resources: ['*']
     }));
 
-    // API Gateway with IAM authentication
+    // IAM role for API Gateway access
+    const apiInvokeRole = new iam.Role(this, 'ApiInvokeRole', {
+      roleName: "RamApiInvokeRole",
+      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+      inlinePolicies: {
+        ApiGatewayInvokePolicy: new iam.PolicyDocument({
+          statements: [
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: ['execute-api:Invoke'],
+              resources: ['*']
+            })
+          ]
+        })
+      }
+    });
+    // API Gateway with IAM authentication and resource policy
     const api = new apigateway.RestApi(this, 'WebServiceApi', {
       restApiName: 'RAM Strands Agent API',
       defaultMethodOptions: {
         authorizationType: apigateway.AuthorizationType.IAM,
       },
+      policy: new iam.PolicyDocument({
+        statements: [
+          new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            principals: [apiInvokeRole],
+            actions: ['execute-api:Invoke'],
+            resources: ['*']
+          })
+        ]
+      })
     });
 
     // Lambda integration
@@ -56,10 +82,15 @@ export class LambdaApiStack extends cdk.Stack {
     const recommendResource = api.root.addResource('recommend');
     recommendResource.addMethod('POST', lambdaIntegration);
 
-    // Output API URL
+    // Output API URL and IAM role ARN
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: api.url,
       description: 'RAM Strands Agent API Gateway URL',
+    });
+
+    new cdk.CfnOutput(this, 'ApiInvokeRoleArn', {
+      value: apiInvokeRole.roleArn,
+      description: 'IAM Role ARN for API Gateway access',
     });
   }
 }
