@@ -37,6 +37,9 @@ Ram19 account
 ## Testing
 
 The API requires IAM authentication. Use AWS CLI or SDK with proper credentials:
+ada credentials update --account=083516982417 --provider=conduit --role=IibsAdminAccess-DO-NOT-DELETE --conduit-read-only --once
+ada credentials update --account=083516982417 --provider=conduit --role=RamApiInvokeRole --conduit-read-only --once
+
 
 ```bash
 aws apigateway test-invoke-method \
