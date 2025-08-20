@@ -1,8 +1,11 @@
 from strands import Agent
 from strands.models import BedrockModel
 from strands.tools.mcp import MCPClient
-from strands_tools import http_request
+from strands_tools import http_request, current_time, retrieve
+
 from mcp import stdio_client, StdioServerParameters
+
+
 
 model_id = "anthropic.claude-3-5-sonnet-20240620-v1:0"
 
