@@ -6,6 +6,10 @@ import json
 from strands.models import BedrockModel
 import requests 
 import os
+from bedrock_agentcore.runtime import BedrockAgentCoreApp
+
+
+app = BedrockAgentCoreApp()
 
 @tool
 def weather():
@@ -18,7 +22,7 @@ def weather():
     """ Get weather """ # Dummy implementation
     return "sunny"
 
-model = BedrockModel(model_id="anthropic.claude-3-5-sonnet-20240620-v1:0",
+model = BedrockModel(model_id="us.anthropic.claude-3-7-sonnet-20250219-v1:0",
                      region_name="us-east-1"
                      )
 
@@ -29,9 +33,15 @@ agent = Agent(model=model,
 )    
 
 
+@app.entrypoint
+def strands_agent_bedrock(payload):
+    """
+    Invoke the agent with a payload from Bedrock Agent Core.
+    """
+    user_input = payload.get("prompt")
+    print(f"User input {user_input}")
+    response = agent(user_input)
+    return response.message['content'][0]['text']
+    
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--prompt", type=str, default="What is the weather in New York?")
-    args = parser.parse_args()
-    response = agent(args.prompt)
-    print(response)
+    app.run()
